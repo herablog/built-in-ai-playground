@@ -39,6 +39,7 @@ describe('ProofreaderHandler', () => {
 
       expect(mock.create).toHaveBeenCalledWith({
         expectedInputLanguages: ['en', 'fr'],
+        correctionExplanationLanguage: 'en',
       });
     });
 
@@ -47,6 +48,7 @@ describe('ProofreaderHandler', () => {
 
       expect(mock.create).toHaveBeenCalledWith({
         expectedInputLanguages: ['en'],
+        correctionExplanationLanguage: 'en',
       });
     });
 

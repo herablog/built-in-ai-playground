@@ -6,7 +6,9 @@ export class SummarizerHandler extends StreamingHandler {
   declare session: SummarizerSession | null;
 
   async checkAvailability(): Promise<AvailabilityResult> {
-    return checkApi('Summarizer', () => Summarizer.availability());
+    return checkApi('Summarizer', () => Summarizer.availability({
+      outputLanguage: this.attr('output-language', 'en'),
+    }));
   }
 
   async createSession(): Promise<void> {
@@ -17,6 +19,7 @@ export class SummarizerHandler extends StreamingHandler {
       format: this.attr('format', 'markdown') as SummarizerCreateOptions['format'],
       length: this.attr('length', 'medium') as SummarizerCreateOptions['length'],
       sharedContext: this.attr('shared-context') || undefined,
+      outputLanguage: this.attr('output-language', 'en'),
     });
   }
 

@@ -186,6 +186,14 @@
             </select>
           </label>
 
+          <label>Output Language
+            <select id="summarizer-output-language">
+              <option value="en" selected>English</option>
+              <option value="ja">Japanese</option>
+              <option value="es">Spanish</option>
+            </select>
+          </label>
+
           <label>Shared Context
             <textarea id="summarizer-context" rows="2" placeholder="Optional context..."></textarea>
           </label>
@@ -194,7 +202,7 @@
 
       <div class="content">
         <div class="result-area md-output" id="summarizer-output"></div>
-        <built-in-ai id="summarizer-ai" api="summarizer" type="key-points" format="markdown" length="medium" placeholder="Paste text to summarize..."></built-in-ai>
+        <built-in-ai id="summarizer-ai" api="summarizer" type="key-points" format="markdown" length="medium" output-language="en" placeholder="Paste text to summarize..."></built-in-ai>
       </div>
     </section>
 
@@ -229,6 +237,14 @@
             </select>
           </label>
 
+          <label>Output Language
+            <select id="writer-output-language">
+              <option value="en" selected>English</option>
+              <option value="ja">Japanese</option>
+              <option value="es">Spanish</option>
+            </select>
+          </label>
+
           <label>Shared Context
             <textarea id="writer-context" rows="2" placeholder="Optional context..."></textarea>
           </label>
@@ -237,7 +253,7 @@
 
       <div class="content">
         <div class="result-area md-output" id="writer-output"></div>
-        <built-in-ai id="writer-ai" api="writer" tone="neutral" format="markdown" length="short" placeholder="Describe what to write..."></built-in-ai>
+        <built-in-ai id="writer-ai" api="writer" tone="neutral" format="markdown" length="short" output-language="en" placeholder="Describe what to write..."></built-in-ai>
       </div>
     </section>
 
@@ -273,6 +289,14 @@
             </select>
           </label>
 
+          <label>Output Language
+            <select id="rewriter-output-language">
+              <option value="en" selected>English</option>
+              <option value="ja">Japanese</option>
+              <option value="es">Spanish</option>
+            </select>
+          </label>
+
           <label>Shared Context
             <textarea id="rewriter-context" rows="2" placeholder="Optional context..."></textarea>
           </label>
@@ -281,7 +305,7 @@
 
       <div class="content">
         <div class="result-area md-output" id="rewriter-output"></div>
-        <built-in-ai id="rewriter-ai" api="rewriter" tone="as-is" format="as-is" length="as-is" placeholder="Paste text to rewrite..."></built-in-ai>
+        <built-in-ai id="rewriter-ai" api="rewriter" tone="as-is" format="as-is" length="as-is" output-language="en" placeholder="Paste text to rewrite..."></built-in-ai>
       </div>
     </section>
 
@@ -352,12 +376,13 @@
         <button class="sidebar-close" aria-label="Close sidebar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6"/></svg></button>
         <div class="sidebar-body">
           <div class="status-badge" id="status-proofreader">Checking...</div>
+
         </div>
       </aside>
 
       <div class="content">
         <div class="result-area md-output" id="proofreader-output"></div>
-        <built-in-ai id="proofreader-ai" api="proofreader" expected-input-languages="en" placeholder="Enter text to proofread..."></built-in-ai>
+        <built-in-ai id="proofreader-ai" api="proofreader" expected-input-languages="en" correction-explanation-language="en" placeholder="Enter text to proofread..."></built-in-ai>
       </div>
     </section>
   </main>

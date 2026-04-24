@@ -6,7 +6,9 @@ export class RewriterHandler extends StreamingHandler {
   declare session: RewriterSession | null;
 
   async checkAvailability(): Promise<AvailabilityResult> {
-    return checkApi('Rewriter', () => Rewriter.availability());
+    return checkApi('Rewriter', () => Rewriter.availability({
+      outputLanguage: this.attr('output-language', 'en'),
+    }));
   }
 
   async createSession(): Promise<void> {
@@ -17,6 +19,7 @@ export class RewriterHandler extends StreamingHandler {
       format: this.attr('format', 'as-is') as RewriterCreateOptions['format'],
       length: this.attr('length', 'as-is') as RewriterCreateOptions['length'],
       sharedContext: this.attr('shared-context') || undefined,
+      outputLanguage: this.attr('output-language', 'en'),
     });
   }
 

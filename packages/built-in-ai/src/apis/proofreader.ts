@@ -4,7 +4,9 @@ export class ProofreaderHandler extends BaseHandler {
   declare session: ProofreaderSession | null;
 
   async checkAvailability(): Promise<AvailabilityResult> {
-    return checkApi('Proofreader', () => Proofreader.availability());
+    return checkApi('Proofreader', () => Proofreader.availability({
+      correctionExplanationLanguage: this.attr('correction-explanation-language', 'en'),
+    }));
   }
 
   async createSession(): Promise<void> {
@@ -13,6 +15,7 @@ export class ProofreaderHandler extends BaseHandler {
     const langs = this.attr('expected-input-languages', 'en').split(',').map(s => s.trim());
     this.session = await Proofreader.create({
       expectedInputLanguages: langs,
+      correctionExplanationLanguage: this.attr('correction-explanation-language', 'en'),
     });
   }
 

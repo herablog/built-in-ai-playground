@@ -45,6 +45,7 @@ describe('RewriterHandler', () => {
         format: 'markdown',
         length: 'shorter',
         sharedContext: 'ctx',
+        outputLanguage: 'en',
       });
     });
 
@@ -56,6 +57,7 @@ describe('RewriterHandler', () => {
         format: 'as-is',
         length: 'as-is',
         sharedContext: undefined,
+        outputLanguage: 'en',
       });
     });
 

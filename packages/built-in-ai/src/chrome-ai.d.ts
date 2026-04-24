@@ -193,12 +193,13 @@ interface ProofreaderResult {
 }
 
 interface ProofreaderSession {
-  proofread(text: string): Promise<ProofreaderResult>;
+  proofread(text: string, options?: { signal?: AbortSignal }): Promise<ProofreaderResult>;
   destroy(): void;
 }
 
 interface ProofreaderCreateOptions {
   expectedInputLanguages?: string[];
+  correctionExplanationLanguage?: string;
   monitor?: (m: DownloadMonitor) => void;
   signal?: AbortSignal;
 }

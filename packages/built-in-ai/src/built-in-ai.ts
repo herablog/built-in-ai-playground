@@ -44,9 +44,9 @@ export class BuiltInAI extends HTMLElement {
       'api', 'placeholder', 'disabled',
       'system-prompt', 'temperature', 'top-k', 'input-languages', 'output-languages', 'input-types',
       'response-constraint', 'omit-response-constraint-input',
-      'type', 'format', 'length', 'tone', 'shared-context',
+      'type', 'format', 'length', 'tone', 'shared-context', 'output-language',
       'source-language', 'target-language', 'accept',
-      'expected-input-languages',
+      'expected-input-languages', 'correction-explanation-language',
     ];
   }
 

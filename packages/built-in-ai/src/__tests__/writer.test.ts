@@ -45,6 +45,7 @@ describe('WriterHandler', () => {
         format: 'plain-text',
         length: 'long',
         sharedContext: 'context',
+        outputLanguage: 'en',
       });
     });
 
@@ -56,6 +57,7 @@ describe('WriterHandler', () => {
         format: 'markdown',
         length: 'short',
         sharedContext: undefined,
+        outputLanguage: 'en',
       });
     });
 

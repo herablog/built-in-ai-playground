@@ -6,7 +6,9 @@ export class WriterHandler extends StreamingHandler {
   declare session: WriterSession | null;
 
   async checkAvailability(): Promise<AvailabilityResult> {
-    return checkApi('Writer', () => Writer.availability());
+    return checkApi('Writer', () => Writer.availability({
+      outputLanguage: this.attr('output-language', 'en'),
+    }));
   }
 
   async createSession(): Promise<void> {
@@ -17,6 +19,7 @@ export class WriterHandler extends StreamingHandler {
       format: this.attr('format', 'markdown') as WriterCreateOptions['format'],
       length: this.attr('length', 'short') as WriterCreateOptions['length'],
       sharedContext: this.attr('shared-context') || undefined,
+      outputLanguage: this.attr('output-language', 'en'),
     });
   }
 

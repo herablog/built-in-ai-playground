@@ -23,13 +23,16 @@ export class PromptHandler extends BaseHandler {
   async checkAvailability(): Promise<AvailabilityResult> {
     if (!('LanguageModel' in self)) return { status: 'unavailable' };
     try {
-      const status = await LanguageModel.availability();
+      const outputLangs = this.attr('output-languages', 'en,ja,es').split(',').map(s => s.trim());
+      const expectedOutputs: { type: string; languages: string[] }[] = [{ type: 'text', languages: outputLangs }];
+      const status = await LanguageModel.availability({ expectedOutputs });
       const inputTypes: Record<string, boolean> = {};
       const types = this.attr('input-types', 'text').split(',').map(s => s.trim());
       for (const type of types) {
         try {
           const s = await LanguageModel.create({
             expectedInputs: [{ type: 'text' }, ...(type !== 'text' ? [{ type }] : [])],
+            expectedOutputs,
           });
           s.destroy();
           inputTypes[type] = true;
@@ -204,7 +207,9 @@ export class PromptHandler extends BaseHandler {
 
     try {
       const historyText = this.chatHistory.map(m => `${m.role}: ${m.content}`).join('\n');
-      const summarizer = await Summarizer.create({ type: 'key-points', length: 'medium' });
+      const outputLangs = this.sessionOptions?.expectedOutputs?.[0]?.languages;
+      const outputLanguage = outputLangs?.[0] || 'en';
+      const summarizer = await Summarizer.create({ type: 'key-points', length: 'medium', outputLanguage });
       const summary = await summarizer.summarize(historyText);
       summarizer.destroy();
 

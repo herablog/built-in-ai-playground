@@ -623,7 +623,7 @@ dropZone.addEventListener('drop', async (e) => {
 // ============================================================
 
 const summarizerAi = $('summarizer-ai');
-const summarizerAttrs = { 'summarizer-type': 'type', 'summarizer-format': 'format', 'summarizer-length': 'length', 'summarizer-context': 'shared-context' };
+const summarizerAttrs = { 'summarizer-type': 'type', 'summarizer-format': 'format', 'summarizer-length': 'length', 'summarizer-output-language': 'output-language', 'summarizer-context': 'shared-context' };
 Object.entries(summarizerAttrs).forEach(([id, attr]) => {
   $(id).addEventListener('change', (e) => summarizerAi.setAttribute(attr, e.target.value));
 });
@@ -642,7 +642,7 @@ summarizerAi.addEventListener('response', () => {
 // ============================================================
 
 const writerAi = $('writer-ai');
-const writerAttrs = { 'writer-tone': 'tone', 'writer-format': 'format', 'writer-length': 'length', 'writer-context': 'shared-context' };
+const writerAttrs = { 'writer-tone': 'tone', 'writer-format': 'format', 'writer-length': 'length', 'writer-output-language': 'output-language', 'writer-context': 'shared-context' };
 Object.entries(writerAttrs).forEach(([id, attr]) => {
   $(id).addEventListener('change', (e) => writerAi.setAttribute(attr, e.target.value));
 });
@@ -661,7 +661,7 @@ writerAi.addEventListener('response', () => {
 // ============================================================
 
 const rewriterAi = $('rewriter-ai');
-const rewriterAttrs = { 'rewriter-tone': 'tone', 'rewriter-format': 'format', 'rewriter-length': 'length', 'rewriter-context': 'shared-context' };
+const rewriterAttrs = { 'rewriter-tone': 'tone', 'rewriter-format': 'format', 'rewriter-length': 'length', 'rewriter-output-language': 'output-language', 'rewriter-context': 'shared-context' };
 Object.entries(rewriterAttrs).forEach(([id, attr]) => {
   $(id).addEventListener('change', (e) => rewriterAi.setAttribute(attr, e.target.value));
 });
@@ -726,8 +726,9 @@ $('detector-ai').addEventListener('detect', (e) => {
 });
 
 // ============================================================
-// Proofreader — Output
+// Proofreader — Sidebar Sync + Output
 // ============================================================
+
 
 $('proofreader-ai').addEventListener('proofread', (e) => {
   const output = $('proofreader-output');

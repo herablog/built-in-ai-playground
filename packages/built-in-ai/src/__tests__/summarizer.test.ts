@@ -47,6 +47,7 @@ describe('SummarizerHandler', () => {
         format: 'plain-text',
         length: 'short',
         sharedContext: 'some context',
+        outputLanguage: 'en',
       });
     });
 
@@ -58,6 +59,7 @@ describe('SummarizerHandler', () => {
         format: 'markdown',
         length: 'medium',
         sharedContext: undefined,
+        outputLanguage: 'en',
       });
     });
 
