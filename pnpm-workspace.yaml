@@ -1,0 +1,15 @@
+packages:
+  - 'packages/*'
+  - 'apps/*'
+strictDepBuilds: true
+strictPeerDependencies: true
+autoInstallPeers: false
+savePrefix: ''
+blockExoticSubdeps: true
+onlyBuiltDependencies:
+  - esbuild
+overrides:
+  canvas: '-'
+trustPolicy: no-downgrade
+verifyDepsBeforeRun: error
+minimumReleaseAge: 1440

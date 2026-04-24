@@ -1,0 +1,8 @@
+.DS_Store
+*.png
+*.jpg
+node_modules/
+.pnpm-store/
+dist/
+packages/*/dist/
+apps/*/dist/
