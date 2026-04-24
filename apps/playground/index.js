@@ -1,5 +1,5 @@
 // ============================================================
-// Chrome Built-in AI Playground - Application Logic
+// Built-in AI Playground - Application Logic
 // Uses <built-in-ai> Web Component for API communication
 // ============================================================
 import '@herablog/built-in-ai/define';
