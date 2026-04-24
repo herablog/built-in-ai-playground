@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>built-in-ai - Basic Example</title>
+  <meta http-equiv="origin-trial" content="AtT5Sa0haTRPKUPTIfv4/RhlnF/LEVO2kT8rCpjeAAsVljeghJtZkT8x386hAcXxUs7qGweLrPzOkGp2ZSQs8QcAAABmeyJvcmlnaW4iOiJodHRwczovL2hlcmFibG9nLmdpdGh1Yi5pbzo0NDMiLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElNdWx0aW1vZGFsSW5wdXQiLCJleHBpcnkiOjE3ODE1NjgwMDB9">
+  <meta http-equiv="origin-trial" content="AuaDc8etcmwBNzqwZVbPYZHEpLiuwyydA5mXBA/1Z+M0M4rvqiXHBfjJGTLirQYJvA+Jh2uG40tjmKduLNb35AMAAABdeyJvcmlnaW4iOiJodHRwczovL2hlcmFibG9nLmdpdGh1Yi5pbzo0NDMiLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElQYXJhbXMiLCJleHBpcnkiOjE3OTEyNDQ4MDB9">
+  <meta http-equiv="origin-trial" content="AoFJ969gSyOdtNk790ylNLEWi9nn1qB7aLN+2zrFnRjdOCCnzP4CAPXkm9WfLk3AGTq4hZPzeizKhm1GQfVCPAoAAABceyJvcmlnaW4iOiJodHRwczovL2hlcmFibG9nLmdpdGh1Yi5pbzo0NDMiLCJmZWF0dXJlIjoiQUlQcm9vZnJlYWRlckFQSSIsImV4cGlyeSI6MTc3OTE0ODgwMH0=">
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 20px; }
+    h1 { font-size: 1.25rem; }
+    h2 { font-size: 1rem; margin-top: 2rem; color: #666; }
+    .output { margin-top: 8px; padding: 12px; background: #f5f5f5; border-radius: 8px; min-height: 40px; white-space: pre-wrap; font-size: 0.9rem; }
+    .output:empty::before { content: 'Waiting for response...'; color: #aaa; }
+  </style>
+</head>
+<body>
+  <h1>built-in-ai - Basic Example</h1>
+
+  <h2>Prompt API</h2>
+  <built-in-ai id="prompt" api="prompt" system-prompt="You are a helpful assistant." input-types="text,image,audio" show-context auto-compact placeholder="Ask anything..."></built-in-ai>
+  <div class="output" id="prompt-output"></div>
+
+  <h2>Summarizer</h2>
+  <built-in-ai id="summarizer" api="summarizer" type="key-points" length="medium" placeholder="Paste text to summarize..."></built-in-ai>
+  <div class="output" id="summarizer-output"></div>
+
+  <h2>Writer</h2>
+  <built-in-ai id="writer" api="writer" tone="casual" length="short" placeholder="Describe what to write..."></built-in-ai>
+  <div class="output" id="writer-output"></div>
+
+  <h2>Rewriter</h2>
+  <built-in-ai id="rewriter" api="rewriter" tone="more-formal" placeholder="Paste text to rewrite..."></built-in-ai>
+  <div class="output" id="rewriter-output"></div>
+
+  <h2>Translator (EN → JA)</h2>
+  <built-in-ai id="translator" api="translator" source-language="en" target-language="ja" placeholder="Enter English text..."></built-in-ai>
+  <div class="output" id="translator-output"></div>
+
+  <h2>Language Detector</h2>
+  <built-in-ai id="detector" api="detector" placeholder="Enter text to detect language..."></built-in-ai>
+  <div class="output" id="detector-output"></div>
+
+  <h2>Proofreader</h2>
+  <built-in-ai id="proofreader" api="proofreader" expected-input-languages="en" placeholder="Enter text to proofread..."></built-in-ai>
+  <div class="output" id="proofreader-output"></div>
+
+  <script src="dist/built-in-ai.min.js"></script>
+  <script>
+    // Intercept commands
+    document.getElementById('prompt').addEventListener('beforesend', (e) => {
+      const el = e.target;
+      if (e.detail.text === '/compact') {
+        e.preventDefault();
+        el.compact();
+      } else if (e.detail.text === '/clear') {
+        e.preventDefault();
+        el.destroy();
+        document.getElementById('prompt-output').textContent = '';
+      }
+    });
+
+    // Streaming APIs
+    ['prompt', 'summarizer', 'writer', 'rewriter', 'translator'].forEach(id => {
+      const el = document.getElementById(id);
+      const out = document.getElementById(`${id}-output`);
+
+      el.addEventListener('stream', (e) => {
+        out.textContent = e.detail.accumulated;
+      });
+
+      el.addEventListener('response', (e) => {
+        out.textContent = e.detail.text;
+      });
+
+      el.addEventListener('error', (e) => {
+        out.textContent = `Error: ${e.detail.message}`;
+        out.style.color = '#dc2626';
+      });
+
+      el.addEventListener('availability', (e) => {
+        console.log(`[${id}] availability:`, e.detail);
+      });
+    });
+
+    // Detector
+    const detector = document.getElementById('detector');
+    const detOut = document.getElementById('detector-output');
+
+    detector.addEventListener('detect', (e) => {
+      detOut.textContent = e.detail.results
+        .map(r => `${r.detectedLanguage}: ${(r.confidence * 100).toFixed(1)}%`)
+        .join('\n');
+    });
+
+    detector.addEventListener('error', (e) => {
+      detOut.textContent = `Error: ${e.detail.message}`;
+      detOut.style.color = '#dc2626';
+    });
+
+    detector.addEventListener('availability', (e) => {
+      console.log('[detector] availability:', e.detail);
+    });
+
+    // Proofreader
+    const proofreader = document.getElementById('proofreader');
+    const proofOut = document.getElementById('proofreader-output');
+
+    proofreader.addEventListener('proofread', (e) => {
+      proofOut.style.color = '';
+      proofOut.textContent = e.detail.correctedInput;
+    });
+
+    proofreader.addEventListener('error', (e) => {
+      proofOut.textContent = `Error: ${e.detail.message}`;
+      proofOut.style.color = '#dc2626';
+    });
+
+    proofreader.addEventListener('availability', (e) => {
+      console.log('[proofreader] availability:', e.detail);
+    });
+  </script>
+</body>
+</html>

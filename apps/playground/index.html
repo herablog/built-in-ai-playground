@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Test Chrome's on-device AI APIs — Prompt, Summarizer, Writer, Rewriter, Translator, and Language Detector — all running locally with Gemini Nano.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://herablog.github.io/gemini-nano-in-chrome-playground/">
+  <meta property="og:title" content="Chrome Built-in AI Playground">
+  <meta property="og:description" content="Test Chrome's on-device AI APIs — Prompt, Summarizer, Writer, Rewriter, Translator, and Language Detector — all running locally with Gemini Nano.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Chrome Built-in AI Playground">
+  <meta name="twitter:description" content="Test Chrome's on-device AI APIs — Prompt, Summarizer, Writer, Rewriter, Translator, and Language Detector — all running locally with Gemini Nano.">
+  <meta name="theme-color" content="#fafafa">
+  <meta name="color-scheme" content="light dark">
+  <link rel="canonical" href="https://herablog.github.io/gemini-nano-in-chrome-playground/">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <meta http-equiv="origin-trial" content="AtT5Sa0haTRPKUPTIfv4/RhlnF/LEVO2kT8rCpjeAAsVljeghJtZkT8x386hAcXxUs7qGweLrPzOkGp2ZSQs8QcAAABmeyJvcmlnaW4iOiJodHRwczovL2hlcmFibG9nLmdpdGh1Yi5pbzo0NDMiLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElNdWx0aW1vZGFsSW5wdXQiLCJleHBpcnkiOjE3ODE1NjgwMDB9">
+  <meta http-equiv="origin-trial" content="AuaDc8etcmwBNzqwZVbPYZHEpLiuwyydA5mXBA/1Z+M0M4rvqiXHBfjJGTLirQYJvA+Jh2uG40tjmKduLNb35AMAAABdeyJvcmlnaW4iOiJodHRwczovL2hlcmFibG9nLmdpdGh1Yi5pbzo0NDMiLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElQYXJhbXMiLCJleHBpcnkiOjE3OTEyNDQ4MDB9">
+  <meta http-equiv="origin-trial" content="AoFJ969gSyOdtNk790ylNLEWi9nn1qB7aLN+2zrFnRjdOCCnzP4CAPXkm9WfLk3AGTq4hZPzeizKhm1GQfVCPAoAAABceyJvcmlnaW4iOiJodHRwczovL2hlcmFibG9nLmdpdGh1Yi5pbzo0NDMiLCJmZWF0dXJlIjoiQUlQcm9vZnJlYWRlckFQSSIsImV4cGlyeSI6MTc3OTE0ODgwMH0=">
+  <title>Chrome Built-in AI Playground</title>
+  <link rel="stylesheet" href="index.css">
+  <script src="dist/app.min.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="header">
+    <h1>Chrome Built-in AI Playground</h1>
+    <p class="header-notice">All processing runs on-device with no network requests. Note that some browser extensions may send data externally.</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" role="tab" id="tab-prompt" aria-selected="true" aria-controls="panel-prompt" tabindex="0" data-api="prompt">Prompt</button>
+    <button class="tab" role="tab" id="tab-summarizer" aria-selected="false" aria-controls="panel-summarizer" tabindex="-1" data-api="summarizer">Summarizer</button>
+    <button class="tab" role="tab" id="tab-writer" aria-selected="false" aria-controls="panel-writer" tabindex="-1" data-api="writer">Writer</button>
+    <button class="tab" role="tab" id="tab-rewriter" aria-selected="false" aria-controls="panel-rewriter" tabindex="-1" data-api="rewriter">Rewriter</button>
+    <button class="tab" role="tab" id="tab-translator" aria-selected="false" aria-controls="panel-translator" tabindex="-1" data-api="translator">Translator</button>
+    <button class="tab" role="tab" id="tab-detector" aria-selected="false" aria-controls="panel-detector" tabindex="-1" data-api="detector">Language Detector</button>
+    <button class="tab" role="tab" id="tab-proofreader" aria-selected="false" aria-controls="panel-proofreader" tabindex="-1" data-api="proofreader">Proofreader</button>
+  </nav>
+
+  <main class="main" id="main-content">
+    <!-- ===== Prompt API ===== -->
+    <section class="api-panel" id="panel-prompt" role="tabpanel" aria-labelledby="tab-prompt" tabindex="0">
+      <button class="sidebar-open" aria-label="Open sidebar" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 18l6-6-6-6"/></svg></button>
+      <aside class="sidebar">
+        <button class="sidebar-close" aria-label="Close sidebar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="sidebar-body">
+          <div class="status-badge" id="status-prompt">Checking...</div>
+
+          <label>System Prompt
+            <textarea id="prompt-system" rows="3" placeholder="You are a helpful assistant."></textarea>
+          </label>
+
+          <div class="sidebar-range-field">
+            <div class="sidebar-range-header">
+              <label for="prompt-temp">Temperature:</label>
+              <span id="prompt-temp-val">1.0</span>
+            </div>
+            <input type="range" id="prompt-temp" min="0" max="2" step="0.1" value="1.0" aria-valuetext="1.0">
+          </div>
+
+          <div class="sidebar-range-field">
+            <div class="sidebar-range-header">
+              <label for="prompt-topk">Top-K:</label>
+              <span id="prompt-topk-val">3</span>
+            </div>
+            <input type="range" id="prompt-topk" min="1" max="128" step="1" value="3" aria-valuetext="3">
+          </div>
+
+          <fieldset>
+            <legend>Input Languages</legend>
+            <label><input type="checkbox" name="prompt-input-lang" value="en" checked> English</label>
+            <label><input type="checkbox" name="prompt-input-lang" value="ja" checked> Japanese</label>
+            <label><input type="checkbox" name="prompt-input-lang" value="es" checked> Spanish</label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Output Languages</legend>
+            <label><input type="checkbox" name="prompt-output-lang" value="en" checked> English</label>
+            <label><input type="checkbox" name="prompt-output-lang" value="ja" checked> Japanese</label>
+            <label><input type="checkbox" name="prompt-output-lang" value="es" checked> Spanish</label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Input Types</legend>
+            <label><input type="checkbox" name="prompt-input-type" value="text" checked> Text</label>
+            <label><input type="checkbox" name="prompt-input-type" value="image" checked> Image</label>
+            <label><input type="checkbox" name="prompt-input-type" value="audio" checked> Audio</label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Structured Output</legend>
+            <label>JSON Schema
+              <textarea id="prompt-structured-schema" rows="6" placeholder='{"type":"object","properties":{"answer":{"type":"string"},"confidence":{"type":"number"}},"required":["answer","confidence"]}'></textarea>
+            </label>
+            <label id="prompt-omit-label" hidden>
+              <input type="checkbox" id="prompt-omit-constraint" checked> Include schema in prompt
+            </label>
+          </fieldset>
+        </div>
+      </aside>
+
+      <div class="content">
+        <div class="chat-messages" id="prompt-messages">
+          <div class="chat-welcome" id="prompt-welcome">
+            <div class="welcome-greeting">What's on your mind?</div>
+            <p class="welcome-sub">Everything runs privately on your device.</p>
+            <div class="welcome-hints">
+              <div class="welcome-hint">
+                <span class="command-tag">/clear</span>
+                <span>Start fresh</span>
+              </div>
+              <div class="welcome-hint">
+                <span class="command-tag">/compact</span>
+                <span>Free up context</span>
+              </div>
+            </div>
+            <div class="welcome-setup" id="prompt-welcome-setup" hidden>
+              <p class="welcome-setup-title">Setup checklist</p>
+              <ul class="setup-checklist">
+                <li id="check-chrome">Chrome 138+</li>
+                <li id="check-api">LanguageModel API enabled</li>
+                <li id="check-model">Model downloaded &amp; available</li>
+                <li id="check-storage">Storage: 22GB+ free</li>
+                <li id="check-memory">RAM: 16GB+</li>
+                <li id="check-cpu">CPU: 4+ cores</li>
+                <li id="check-gpu">GPU</li>
+              </ul>
+              <div class="setup-help">
+                <p>To enable, visit:</p>
+                <code>chrome://flags/#optimization-guide-on-device-model</code>
+                <code>chrome://flags/#prompt-api-for-gemini-nano</code>
+                <p>Then relaunch Chrome (22GB+ free space needed).</p>
+              </div>
+            </div>
+            <a class="welcome-link" href="https://developer.chrome.com/docs/ai/get-started" target="_blank" rel="noopener">Learn about built-in AI ↗</a>
+          </div>
+        </div>
+        <built-in-ai
+          id="prompt-ai"
+          api="prompt"
+          system-prompt=""
+          temperature="1"
+          top-k="3"
+          input-languages="en,ja,es"
+          output-languages="en,ja,es"
+          input-types="text,image,audio"
+          accept="image/*,audio/*,.zip,.pdf,.txt,.md,.csv,.json,.xml,.html,.css,.js,.ts,.py,.rb,.go,.rs,.java,.c,.cpp,.h,.yaml,.yml,.toml,.ini,.log"
+          show-context
+          auto-compact
+        ></built-in-ai>
+        <p class="ai-notice">AI can make mistakes.</p>
+      </div>
+    </section>
+
+    <!-- ===== Summarizer API ===== -->
+    <section class="api-panel" id="panel-summarizer" role="tabpanel" aria-labelledby="tab-summarizer" tabindex="0" hidden>
+      <button class="sidebar-open" aria-label="Open sidebar" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 18l6-6-6-6"/></svg></button>
+      <aside class="sidebar">
+        <button class="sidebar-close" aria-label="Close sidebar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="sidebar-body">
+          <div class="status-badge" id="status-summarizer">Checking...</div>
+
+          <label>Type
+            <select id="summarizer-type">
+              <option value="key-points">Key Points</option>
+              <option value="tldr">TL;DR</option>
+              <option value="teaser">Teaser</option>
+              <option value="headline">Headline</option>
+            </select>
+          </label>
+
+          <label>Format
+            <select id="summarizer-format">
+              <option value="markdown">Markdown</option>
+              <option value="plain-text">Plain Text</option>
+            </select>
+          </label>
+
+          <label>Length
+            <select id="summarizer-length">
+              <option value="short">Short</option>
+              <option value="medium" selected>Medium</option>
+              <option value="long">Long</option>
+            </select>
+          </label>
+
+          <label>Shared Context
+            <textarea id="summarizer-context" rows="2" placeholder="Optional context..."></textarea>
+          </label>
+        </div>
+      </aside>
+
+      <div class="content">
+        <div class="result-area md-output" id="summarizer-output"></div>
+        <built-in-ai id="summarizer-ai" api="summarizer" type="key-points" format="markdown" length="medium" placeholder="Paste text to summarize..."></built-in-ai>
+      </div>
+    </section>
+
+    <!-- ===== Writer API ===== -->
+    <section class="api-panel" id="panel-writer" role="tabpanel" aria-labelledby="tab-writer" tabindex="0" hidden>
+      <button class="sidebar-open" aria-label="Open sidebar" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 18l6-6-6-6"/></svg></button>
+      <aside class="sidebar">
+        <button class="sidebar-close" aria-label="Close sidebar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="sidebar-body">
+          <div class="status-badge" id="status-writer">Checking...</div>
+
+          <label>Tone
+            <select id="writer-tone">
+              <option value="neutral" selected>Neutral</option>
+              <option value="formal">Formal</option>
+              <option value="casual">Casual</option>
+            </select>
+          </label>
+
+          <label>Format
+            <select id="writer-format">
+              <option value="markdown">Markdown</option>
+              <option value="plain-text">Plain Text</option>
+            </select>
+          </label>
+
+          <label>Length
+            <select id="writer-length">
+              <option value="short" selected>Short</option>
+              <option value="medium">Medium</option>
+              <option value="long">Long</option>
+            </select>
+          </label>
+
+          <label>Shared Context
+            <textarea id="writer-context" rows="2" placeholder="Optional context..."></textarea>
+          </label>
+        </div>
+      </aside>
+
+      <div class="content">
+        <div class="result-area md-output" id="writer-output"></div>
+        <built-in-ai id="writer-ai" api="writer" tone="neutral" format="markdown" length="short" placeholder="Describe what to write..."></built-in-ai>
+      </div>
+    </section>
+
+    <!-- ===== Rewriter API ===== -->
+    <section class="api-panel" id="panel-rewriter" role="tabpanel" aria-labelledby="tab-rewriter" tabindex="0" hidden>
+      <button class="sidebar-open" aria-label="Open sidebar" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 18l6-6-6-6"/></svg></button>
+      <aside class="sidebar">
+        <button class="sidebar-close" aria-label="Close sidebar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="sidebar-body">
+          <div class="status-badge" id="status-rewriter">Checking...</div>
+
+          <label>Tone
+            <select id="rewriter-tone">
+              <option value="as-is" selected>As-is</option>
+              <option value="more-formal">More Formal</option>
+              <option value="more-casual">More Casual</option>
+            </select>
+          </label>
+
+          <label>Format
+            <select id="rewriter-format">
+              <option value="as-is" selected>As-is</option>
+              <option value="markdown">Markdown</option>
+              <option value="plain-text">Plain Text</option>
+            </select>
+          </label>
+
+          <label>Length
+            <select id="rewriter-length">
+              <option value="as-is" selected>As-is</option>
+              <option value="shorter">Shorter</option>
+              <option value="longer">Longer</option>
+            </select>
+          </label>
+
+          <label>Shared Context
+            <textarea id="rewriter-context" rows="2" placeholder="Optional context..."></textarea>
+          </label>
+        </div>
+      </aside>
+
+      <div class="content">
+        <div class="result-area md-output" id="rewriter-output"></div>
+        <built-in-ai id="rewriter-ai" api="rewriter" tone="as-is" format="as-is" length="as-is" placeholder="Paste text to rewrite..."></built-in-ai>
+      </div>
+    </section>
+
+    <!-- ===== Translator API ===== -->
+    <section class="api-panel" id="panel-translator" role="tabpanel" aria-labelledby="tab-translator" tabindex="0" hidden>
+      <button class="sidebar-open" aria-label="Open sidebar" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 18l6-6-6-6"/></svg></button>
+      <aside class="sidebar">
+        <button class="sidebar-close" aria-label="Close sidebar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="sidebar-body">
+          <div class="status-badge" id="status-translator">Checking...</div>
+
+          <label>Source Language
+            <select id="translator-source">
+              <option value="en" selected>English</option>
+              <option value="ja">Japanese</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="zh">Chinese (Simplified)</option>
+              <option value="zh-Hant">Chinese (Traditional)</option>
+              <option value="ko">Korean</option>
+              <option value="pt">Portuguese</option>
+            </select>
+          </label>
+
+          <label>Target Language
+            <select id="translator-target">
+              <option value="en">English</option>
+              <option value="ja" selected>Japanese</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="zh">Chinese (Simplified)</option>
+              <option value="zh-Hant">Chinese (Traditional)</option>
+              <option value="ko">Korean</option>
+              <option value="pt">Portuguese</option>
+            </select>
+          </label>
+        </div>
+      </aside>
+
+      <div class="content">
+        <div class="result-area md-output" id="translator-output"></div>
+        <built-in-ai id="translator-ai" api="translator" source-language="en" target-language="ja" placeholder="Enter text to translate..."></built-in-ai>
+      </div>
+    </section>
+
+    <!-- ===== Language Detector API ===== -->
+    <section class="api-panel" id="panel-detector" role="tabpanel" aria-labelledby="tab-detector" tabindex="0" hidden>
+      <button class="sidebar-open" aria-label="Open sidebar" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 18l6-6-6-6"/></svg></button>
+      <aside class="sidebar">
+        <button class="sidebar-close" aria-label="Close sidebar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="sidebar-body">
+          <div class="status-badge" id="status-detector">Checking...</div>
+        </div>
+      </aside>
+
+      <div class="content">
+        <div class="result-area md-output" id="detector-output"></div>
+        <built-in-ai id="detector-ai" api="detector" placeholder="Enter text to detect language..."></built-in-ai>
+      </div>
+    </section>
+
+    <!-- ===== Proofreader API ===== -->
+    <section class="api-panel" id="panel-proofreader" role="tabpanel" aria-labelledby="tab-proofreader" tabindex="0" hidden>
+      <button class="sidebar-open" aria-label="Open sidebar" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 18l6-6-6-6"/></svg></button>
+      <aside class="sidebar">
+        <button class="sidebar-close" aria-label="Close sidebar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="sidebar-body">
+          <div class="status-badge" id="status-proofreader">Checking...</div>
+        </div>
+      </aside>
+
+      <div class="content">
+        <div class="result-area md-output" id="proofreader-output"></div>
+        <built-in-ai id="proofreader-ai" api="proofreader" expected-input-languages="en" placeholder="Enter text to proofread..."></built-in-ai>
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>

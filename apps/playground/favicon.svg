@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Outer O ring -->
+  <circle cx="16" cy="16" r="14" fill="#2563eb"/>
+  <circle cx="16" cy="16" r="9.5" fill="#1d4ed8"/>
+  <!-- Inner cutout (O shape) -->
+  <circle cx="16" cy="16" r="6" fill="#2563eb"/>
+  <!-- Circuit lines extending from O -->
+  <line x1="16" y1="2" x2="16" y2="7" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+  <line x1="16" y1="25" x2="16" y2="30" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+  <line x1="2" y1="16" x2="7" y2="16" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+  <line x1="25" y1="16" x2="30" y2="16" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+</svg>
