@@ -517,7 +517,7 @@ function buildAcceptAttribute() {
   const parts = [];
   if (checkedTypes.includes('image')) parts.push('image/*');
   if (checkedTypes.includes('audio')) parts.push('audio/*');
-  parts.push('.zip', '.pdf');
+  parts.push('.zip', '.xlsx', '.pdf');
   TEXT_EXTS.forEach(ext => parts.push('.' + ext));
   promptAi.setAttribute('accept', parts.join(','));
 }
@@ -592,6 +592,21 @@ async function processFileForComponent(file, component) {
       } else if (TEXT_EXTS.includes(e)) {
         component.addAttachment({ name, text: await entry.async('string') });
       }
+    }
+  } else if (ext === 'xlsx') {
+    const zip = await JSZip.loadAsync(file);
+    let imageCount = 0;
+    for (const [path, entry] of Object.entries(zip.files)) {
+      if (entry.dir || !path.startsWith('xl/media/')) continue;
+      const name = path.split('/').pop();
+      const e = getFileExt(name);
+      if (!IMAGE_EXTS.includes(e)) continue;
+      const blob = await entry.async('blob');
+      component.addAttachment({ name, file: new File([blob], name, { type: getMimeType(e) }) });
+      imageCount++;
+    }
+    if (imageCount === 0) {
+      emitWarning(`"${file.name}" contains no images.`);
     }
   } else if (ext === 'pdf') {
     component.addAttachment({ name: file.name, text: await extractPdfText(file) });
