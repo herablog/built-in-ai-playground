@@ -19,6 +19,7 @@ export class PromptHandler extends BaseHandler {
   sessionOptions: SessionOptions | null = null;
   private _needsCompact = false;
   private _batchAborted = false;
+  private _previousSummary = '';
 
   async checkAvailability(): Promise<AvailabilityResult> {
     if (!('LanguageModel' in self)) return { status: 'unavailable' };
@@ -55,6 +56,7 @@ export class PromptHandler extends BaseHandler {
   override destroy(): void {
     super.destroy();
     this.chatHistory = [];
+    this._previousSummary = '';
     this._updateContext();
   }
 
@@ -206,12 +208,16 @@ export class PromptHandler extends BaseHandler {
     if (this.chatHistory.length === 0) return false;
 
     try {
-      const historyText = this.chatHistory.map(m => `${m.role}: ${m.content}`).join('\n');
+      const recentHistory = this.chatHistory.map(m => `${m.role}: ${m.content}`).join('\n');
+      const historyText = this._previousSummary
+        ? `[Previous summary]\n${this._previousSummary}\n\n[Recent conversation]\n${recentHistory}`
+        : recentHistory;
       const outputLangs = this.sessionOptions?.expectedOutputs?.[0]?.languages;
       const outputLanguage = outputLangs?.[0] || 'en';
       const summarizer = await Summarizer.create({ type: 'key-points', length: 'medium', outputLanguage });
       const summary = await summarizer.summarize(historyText);
       summarizer.destroy();
+      this._previousSummary = summary;
 
       const opts = this.sessionOptions!;
       const systemContent = opts.systemPrompt
