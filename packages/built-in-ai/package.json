@@ -1,0 +1,46 @@
+{
+  "name": "@herablog/built-in-ai",
+  "version": "0.1.0",
+  "description": "Web Component for Chrome Built-in AI APIs",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./define": {
+      "types": "./dist/define.d.ts",
+      "default": "./dist/define.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "./dist/define.js"
+  ],
+  "scripts": {
+    "build": "tsc && esbuild src/define.ts --bundle --minify --format=iife --outfile=dist/built-in-ai.min.js",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm build"
+  },
+  "keywords": [
+    "web-component",
+    "custom-element",
+    "chrome",
+    "built-in-ai",
+    "gemini-nano",
+    "prompt-api"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "0.28.0",
+    "happy-dom": "20.9.0",
+    "typescript": "6.0.3",
+    "vitest": "4.1.4"
+  }
+}
