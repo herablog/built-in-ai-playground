@@ -184,6 +184,7 @@ $('prompt-ai').addEventListener('availability', async (e) => {
       }
     }
   }
+  buildAcceptAttribute();
 
   const isAvailable = e.detail.status === 'readily' || e.detail.status === 'available';
 
@@ -296,6 +297,7 @@ $$('[name="prompt-output-lang"]').forEach(cb => {
 $$('[name="prompt-input-type"]').forEach(cb => {
   cb.addEventListener('change', () => {
     promptAi.setAttribute('input-types', [...$$('[name="prompt-input-type"]:checked')].map(c => c.value).join(','));
+    buildAcceptAttribute();
   });
 });
 
@@ -509,6 +511,16 @@ promptAi.addEventListener('warning', (e) => {
 const IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp', 'svg'];
 const AUDIO_EXTS = ['mp3', 'wav', 'ogg', 'webm', 'flac', 'aac', 'm4a'];
 const TEXT_EXTS = ['txt', 'md', 'csv', 'json', 'xml', 'html', 'css', 'js', 'ts', 'py', 'rb', 'go', 'rs', 'java', 'c', 'cpp', 'h', 'yaml', 'yml', 'toml', 'ini', 'log'];
+
+function buildAcceptAttribute() {
+  const checkedTypes = [...$$('[name="prompt-input-type"]:checked')].map(c => c.value);
+  const parts = [];
+  if (checkedTypes.includes('image')) parts.push('image/*');
+  if (checkedTypes.includes('audio')) parts.push('audio/*');
+  parts.push('.zip', '.pdf');
+  TEXT_EXTS.forEach(ext => parts.push('.' + ext));
+  promptAi.setAttribute('accept', parts.join(','));
+}
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;  // 50 MB per file
 const MAX_ZIP_ENTRIES = 100;

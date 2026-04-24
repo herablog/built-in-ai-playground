@@ -223,6 +223,8 @@ export class BuiltInAI extends HTMLElement {
       this._textarea.disabled = disabled;
       this._sendBtn.disabled = disabled;
       this._sendMenuBtn.disabled = disabled;
+    } else if (name === 'accept') {
+      if (newValue) this._fileInput.accept = newValue;
     } else {
       this._initHandler().catch((err) => this.dispatchEvent(new CustomEvent('error', { detail: err })));
     }
@@ -261,12 +263,6 @@ export class BuiltInAI extends HTMLElement {
       const accept = this.getAttribute('accept');
       if (accept) {
         this._fileInput.accept = accept;
-      } else {
-        const inputTypes = (this.getAttribute('input-types') || 'text').split(',').map(s => s.trim());
-        const parts: string[] = [];
-        if (inputTypes.includes('image')) parts.push('image/*');
-        if (inputTypes.includes('audio')) parts.push('audio/*');
-        this._fileInput.accept = parts.join(',') || '*/*';
       }
     }
 

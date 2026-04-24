@@ -112,6 +112,16 @@ describe('BuiltInAI', () => {
       const textarea = el.shadowRoot!.querySelector('textarea')! as HTMLTextAreaElement;
       expect(textarea.disabled).toBe(false);
     });
+
+    it('changing accept does not reinitialize handler', async () => {
+      const el = createElement({ api: 'prompt' });
+      await el.init();
+      const handler = el.handler;
+
+      el.setAttribute('accept', '.pdf,.txt');
+
+      expect(el.handler).toBe(handler);
+    });
   });
 
   describe('init()', () => {
