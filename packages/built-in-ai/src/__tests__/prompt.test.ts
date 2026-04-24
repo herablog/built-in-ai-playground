@@ -464,6 +464,21 @@ describe('PromptHandler', () => {
     });
   });
 
+  describe('destroy()', () => {
+    it('clears chatHistory', async () => {
+      await handler.createSession();
+      handler.chatHistory = [
+        { role: 'user', content: 'Hi' },
+        { role: 'assistant', content: 'Hello' },
+      ];
+
+      handler.destroy();
+
+      expect(handler.chatHistory).toHaveLength(0);
+      expect(handler.session).toBeNull();
+    });
+  });
+
   describe('_autoCompactIfNeeded()', () => {
     it('compacts when context usage >= 80%', async () => {
       el.setAttribute('auto-compact', '');

@@ -49,6 +49,12 @@ export class PromptHandler extends BaseHandler {
     }
   }
 
+  override destroy(): void {
+    super.destroy();
+    this.chatHistory = [];
+    this._updateContext();
+  }
+
   async createSession(): Promise<void> {
     if (!('LanguageModel' in self)) throw new Error('LanguageModel API is not available.');
 
@@ -237,10 +243,17 @@ export class PromptHandler extends BaseHandler {
   }
 
   private _updateContext(): void {
-    if (!this.session || !this.el.hasAttribute('show-context')) return;
+    if (!this.el.hasAttribute('show-context')) return;
     const ring = this.el.shadowRoot?.querySelector('.context-ring') as HTMLElement | null;
     const fill = this.el.shadowRoot?.querySelector('.context-ring-fill') as SVGElement | null;
     if (!ring || !fill) return;
+
+    if (!this.session) {
+      ring.hidden = true;
+      fill.setAttribute('stroke-dashoffset', '94.25');
+      ring.title = '';
+      return;
+    }
 
     const usage = this.session.contextUsage;
     const ctxWindow = this.session.contextWindow;
