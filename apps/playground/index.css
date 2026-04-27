@@ -524,6 +524,7 @@ body {
   word-break: break-word;
   line-height: 1.6;
   font-size: 1rem;
+  mask-image: linear-gradient(to bottom, transparent, black 16px, black calc(100% - 16px), transparent);
 }
 
 .chat-messages {
